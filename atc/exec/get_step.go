@@ -219,11 +219,11 @@ func (step *GetStep) run(ctx context.Context, state RunState, delegate GetDelega
 		)
 	}()
 
-	processCtx, cancel, err := MaybeTimeout(ctx, step.plan.Timeout)
+	ctx, cancel, err := MaybeTimeout(ctx, step.plan.Timeout)
 	if err != nil {
 		return false, err
 	}
-	processCtx = lagerctx.NewContext(processCtx, logger)
+	ctx = lagerctx.NewContext(ctx, logger)
 
 	defer cancel()
 
@@ -232,7 +232,7 @@ func (step *GetStep) run(ctx context.Context, state RunState, delegate GetDelega
 		ctx,
 		worker,
 		func(ctx context.Context) (runtime.Container, []runtime.VolumeMount, error) {
-			return worker.FindOrCreateContainer(processCtx, containerOwner, step.containerMetadata, containerSpec)
+			return worker.FindOrCreateContainer(ctx, containerOwner, step.containerMetadata, containerSpec)
 		},
 		resource.Resource{
 			Source:  source,
