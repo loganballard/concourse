@@ -72,7 +72,7 @@ type TaskDelegate interface {
 
 	Initializing(lager.Logger)
 	Starting(lager.Logger)
-	Finished(lager.Logger, ExitStatus, runtime.Worker)
+	Finished(lager.Logger, ExitStatus)
 	Errored(lager.Logger, string)
 
 	WaitingForWorker(lager.Logger)
@@ -322,7 +322,7 @@ func (step *TaskStep) run(ctx context.Context, state RunState, delegate TaskDele
 		return false, runErr
 	}
 
-	delegate.Finished(logger, ExitStatus(result.ExitStatus), worker)
+	delegate.Finished(logger, ExitStatus(result.ExitStatus))
 	return result.ExitStatus == 0, nil
 }
 
@@ -427,7 +427,7 @@ func (step *TaskStep) containerSpec(logger lager.Logger, state RunState, imageSp
 
 	containerSpec.Outputs = make(runtime.OutputPaths, len(config.Outputs))
 	for _, output := range config.Outputs {
-		containerSpec.Outputs[output.Name] = artifactPath(metadata.WorkingDirectory, output.Name, output.Path)
+		containerSpec.Outputs[output.Name] = ensureTrailingSlash(artifactPath(metadata.WorkingDirectory, output.Name, output.Path))
 	}
 
 	if config.Limits != nil {
@@ -506,4 +506,11 @@ func resolvePath(workingDir string, path string) string {
 		return path
 	}
 	return filepath.Join(workingDir, path)
+}
+
+func ensureTrailingSlash(path string) string {
+	if strings.HasSuffix(path, "/") {
+		return path
+	}
+	return path + "/"
 }
