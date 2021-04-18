@@ -189,7 +189,7 @@ var _ = Describe("TaskStep", func() {
 
 			It("invokes the delegate's Initializing callback", func() {
 				// validate the process actually ran
-				Expect(chosenContainer.Processes).To(HaveLen(1))
+				Expect(chosenContainer.RunningProcesses()).To(HaveLen(1))
 			})
 		})
 
@@ -774,7 +774,7 @@ var _ = Describe("TaskStep", func() {
 
 			It("runs with the specified dir and user", func() {
 				Expect(stepErr).ToNot(HaveOccurred())
-				Expect(chosenContainer.Processes).To(HaveLen(1))
+				Expect(chosenContainer.RunningProcesses()).To(HaveLen(1))
 			})
 		})
 
