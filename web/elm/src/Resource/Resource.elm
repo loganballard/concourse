@@ -503,7 +503,7 @@ handleCallback callback session ( model, effects ) =
 
                         commentText =
                             "pinned by "
-                                ++ Login.userDisplayName user
+                                ++ Login.userDisplayNameByDisplayId user
                                 ++ " at "
                                 ++ formatDate session.timeZone time
                     in

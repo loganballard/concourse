@@ -2160,6 +2160,7 @@ userWithRoles roles =
     , isAdmin = False
     , teams =
         Dict.fromList roles
+    , displayUserId = "0"
     }
 
 

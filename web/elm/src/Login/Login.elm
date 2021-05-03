@@ -1,4 +1,4 @@
-module Login.Login exposing (Model, update, userDisplayName, view)
+module Login.Login exposing (Model, update, userDisplayNameByDisplayId, view)
 
 import Concourse
 import EffectTransformer exposing (ET)
@@ -74,7 +74,7 @@ viewLoginState userState isUserMenuExpanded =
                 [ Html.div (id "user-id" :: Styles.loginItem)
                     (Html.div
                         Styles.loginText
-                        [ Html.text (userDisplayName user) ]
+                        [ Html.text (userDisplayNameByDisplayId user) ]
                         :: (if isUserMenuExpanded then
                                 [ Html.div
                                     ([ id "logout-button"
@@ -93,10 +93,19 @@ viewLoginState userState isUserMenuExpanded =
             ]
 
 
-userDisplayName : Concourse.User -> String
-userDisplayName user =
-    Maybe.withDefault user.id <|
+userDisplayNameByDisplayId : Concourse.User -> String
+userDisplayNameByDisplayId user =
+    Maybe.withDefault user.displayUserId <|
         List.head <|
             List.filter
                 (not << String.isEmpty)
                 [ user.userName, user.name, user.email ]
+
+
+--userDisplayName : Concourse.User -> String
+--userDisplayName user =
+--    Maybe.withDefault user.id <|
+--        List.head <|
+--            List.filter
+--                (not << String.isEmpty)
+--                [ user.userName, user.name, user.email ]

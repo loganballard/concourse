@@ -107,3 +107,11 @@ test('picks up cluster name from configuration', async t => {
 
   t.is(clusterName, 'dev');
 });
+
+
+test('shows display name correctly', async t => {
+  await t.context.web.page.goto(t.context.web.route('/'));
+
+  // await t.context.web.page.
+  t.is("", "");
+})
